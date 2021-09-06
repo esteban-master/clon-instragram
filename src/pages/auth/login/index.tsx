@@ -1,18 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import LoginForm from '../../../components/auth/loginForm'
 import { toast } from 'react-toastify'
 import { useLogin } from '../../../gql/user'
 import { useHistory } from 'react-router'
+import { useAppDispatch } from '../../../redux/store'
+import { loginAction } from '../../../redux/auth/auth-slice'
 
 const Login = () => {
   let history = useHistory()
   const { mutate, error, status, isLoading } = useLogin()
+  const dispatch = useAppDispatch()
 
   function handleSubmit(values: any) {
     mutate(values, {
-      onSuccess: ({ login: { user } }, variables, ctx) => {
-        toast.success(`Bienvenido ${user.name}`)
-        history.push('/home')
+      onSuccess: ({ login }, variables, ctx) => {
+        toast.success(`Bienvenido ${login.user?.name}`)
+        dispatch(loginAction(login))
+        history.replace('/home')
       },
       onError: (err: any, variables, ctx) => {
         toast.error(err.response.errors[0].message)

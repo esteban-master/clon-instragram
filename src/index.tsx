@@ -2,6 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './styles.css'
 import App from './App'
+import { store } from './redux/store'
+import { Provider } from 'react-redux'
 
 // if (process.env.NODE_ENV === 'development') {
 //   const modules = import.meta.glob('./mocks/browser.ts')
@@ -17,7 +19,9 @@ import App from './App'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 )

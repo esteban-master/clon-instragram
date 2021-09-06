@@ -56,7 +56,7 @@ const RegisterForm = ({ handleSubmit, isLoading }: FormProps) => {
         // if (ok) {
         //   resetForm()
         // }
-        console.log(values)
+        // console.log(values)
       }}
     >
       {(formik) => (
