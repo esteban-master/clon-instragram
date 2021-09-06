@@ -2,8 +2,9 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './styles.css'
 import App from './App'
-import { store } from './redux/store'
+import { persistor, store } from './redux/store'
 import { Provider } from 'react-redux'
+import { PersistGate } from 'reduxjs-toolkit-persist/integration/react'
 
 // if (process.env.NODE_ENV === 'development') {
 //   const modules = import.meta.glob('./mocks/browser.ts')
@@ -20,7 +21,9 @@ import { Provider } from 'react-redux'
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <PersistGate loading={null} persistor={persistor}>
+        <App />
+      </PersistGate>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

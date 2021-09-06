@@ -3,7 +3,7 @@ import { graphqlClient, gql } from '../api/graphql'
 import { ValuesFormRegister } from '../components/auth/registerForm'
 import { Login } from '../redux/auth/auth-slice'
 
-export interface Error {
+export interface ErrorGraphql {
   errors: Error[]
   data: null
   status: number
@@ -73,7 +73,7 @@ const useUser = (userId: string) => {
 const useLogin = () => {
   return useMutation<
     { login: Login },
-    Error,
+    { response: ErrorGraphql },
     { email: string; password: string },
     unknown
   >(async (loginUserData: { email: string; password: string }) => {

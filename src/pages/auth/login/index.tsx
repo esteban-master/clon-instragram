@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import LoginForm from '../../../components/auth/loginForm'
 import { toast } from 'react-toastify'
 import { useLogin } from '../../../gql/user'
@@ -8,7 +8,7 @@ import { loginAction } from '../../../redux/auth/auth-slice'
 
 const Login = () => {
   let history = useHistory()
-  const { mutate, error, status, isLoading } = useLogin()
+  const { mutate, isLoading } = useLogin()
   const dispatch = useAppDispatch()
 
   function handleSubmit(values: any) {
@@ -18,7 +18,7 @@ const Login = () => {
         dispatch(loginAction(login))
         history.replace('/home')
       },
-      onError: (err: any, variables, ctx) => {
+      onError: (err, variables, ctx) => {
         toast.error(err.response.errors[0].message)
       }
     })
