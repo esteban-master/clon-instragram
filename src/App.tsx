@@ -1,22 +1,24 @@
-import React from 'react'
-import icon from '/favicon.svg'
-function App() {
-  return (
-    <div className="bg-white container mx-auto my-5">
-      <img src={icon} className="h-14" alt="Icono vite" />
-      <h1 className="text-3xl my-4">Template react with vite</h1>
+import React, { useState } from 'react'
+import 'react-toastify/dist/ReactToastify.min.css'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
+import { ToastContainer } from 'react-toastify'
+import { VechaiProvider, Input } from '@vechaiui/react'
+import Router from './routes.routes'
 
-      <ul>
-        <li className="text-lg text-purple-600 font-semibold">
-          Jest - Testing Library
-        </li>
-        <li className="text-lg text-purple-600 font-semibold">
-          Mock Service Worker
-        </li>
-        <li className="text-lg text-purple-600 font-semibold">Typescript</li>
-        <li className="text-lg text-purple-600 font-semibold">TailwindCSS</li>
-      </ul>
-    </div>
+const queryClient = new QueryClient()
+
+function App() {
+  const [logged, setLogged] = useState(false)
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
+      <ToastContainer />
+      <VechaiProvider>
+        <Router />
+      </VechaiProvider>
+    </QueryClientProvider>
   )
 }
 
