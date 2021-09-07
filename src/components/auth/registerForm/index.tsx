@@ -27,10 +27,10 @@ const RegisterForm = ({ handleSubmit, isLoading }: FormProps) => {
   return (
     <Formik
       initialValues={{
-        email: '',
-        password: '',
-        name: '',
-        username: ''
+        email: 'marisolbeltranleal@gmail.com',
+        password: 'sdaasadasdasD3#',
+        name: 'user mock jajaja',
+        username: 'mock3212323233'
       }}
       validationSchema={Yup.object({
         email: Yup.string().email().required('El email es requerido'),
@@ -43,7 +43,10 @@ const RegisterForm = ({ handleSubmit, isLoading }: FormProps) => {
           .required('El password es requerido'),
         username: Yup.string()
           .required('El username es requerido')
-          .min(5, 'El username debe tener al menos 5 caracteres'),
+          .min(5, 'El username debe tener al menos 5 caracteres')
+          .matches(/^[a-zA-Z0-9-]*$/, {
+            message: 'Username no debe tener espacios ni caracteres raros'
+          }),
         name: Yup.string()
           .required('El name es requerido')
           .min(5, 'El name debe tener al menos 5 caracteres')

@@ -36,10 +36,18 @@ const authSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(loginAction, (state, action) => {
-      state.login = action.payload
-      state.logged = true
-    })
+    builder
+      .addCase(loginAction, (state, action) => {
+        state.login = action.payload
+        state.logged = true
+      })
+      .addCase(logoutAction, (state) => {
+        state.logged = false
+        state.login = {
+          token: undefined,
+          user: undefined
+        }
+      })
   }
 })
 

@@ -1,6 +1,6 @@
 import { configureStore, combineReducers, AnyAction } from '@reduxjs/toolkit'
-import { useDispatch } from 'react-redux'
-import authReducer from './auth/auth-slice'
+import { useDispatch, useSelector } from 'react-redux'
+import authReducer, { StateAuth } from './auth/auth-slice'
 import {
   persistReducer,
   persistStore,
@@ -24,10 +24,10 @@ const reducers = combineReducers({
   auth: authReducer
 })
 
-const _persistedReducer = persistReducer<any, AnyAction>(
-  persistConfig,
-  reducers
-)
+const _persistedReducer = persistReducer<
+  ReturnType<typeof reducers>,
+  AnyAction
+>(persistConfig, reducers)
 
 export const store = configureStore({
   reducer: _persistedReducer,
@@ -41,7 +41,9 @@ export const store = configureStore({
 })
 
 export const persistor = persistStore(store)
+
 export type AppDispatch = typeof store.dispatch
 export type RootState = ReturnType<typeof store.getState>
 
 export const useAppDispatch = () => useDispatch<AppDispatch>()
+export const useAuth = () => useSelector((state: RootState) => state.auth)

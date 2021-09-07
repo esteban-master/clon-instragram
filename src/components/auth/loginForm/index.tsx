@@ -17,14 +17,17 @@ interface ValuesForm {
 interface FormProps {
   handleSubmit: (values: ValuesForm) => void
   isLoading: boolean
+  initialValues: {
+    email: string
+  }
 }
 
-const LoginForm = ({ handleSubmit, isLoading }: FormProps) => {
-  const [verPassword, setVerPassword] = useState(false)
+const LoginForm = ({ initialValues, handleSubmit, isLoading }: FormProps) => {
+  // const [verPassword, setVerPassword] = useState(false)
   return (
     <Formik
       initialValues={{
-        email: '',
+        email: initialValues.email || '',
         password: ''
       }}
       validationSchema={Yup.object({

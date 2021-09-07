@@ -6,9 +6,9 @@ import { useHistory } from 'react-router'
 import { useAppDispatch } from '../../../redux/store'
 import { loginAction } from '../../../redux/auth/auth-slice'
 
-const Login = () => {
-  let history = useHistory()
+const Login = ({ initialValues }: { initialValues: { email: string } }) => {
   const { mutate, isLoading } = useLogin()
+  const history = useHistory()
   const dispatch = useAppDispatch()
 
   function handleSubmit(values: any) {
@@ -16,7 +16,7 @@ const Login = () => {
       onSuccess: ({ login }, variables, ctx) => {
         toast.success(`Bienvenido ${login.user?.name}`)
         dispatch(loginAction(login))
-        history.replace('/home')
+        history.replace('/')
       },
       onError: (err, variables, ctx) => {
         toast.error(err.response.errors[0].message)
@@ -26,7 +26,11 @@ const Login = () => {
   return (
     <div className="bg-white p-4 w-80 border border-gray-300 space-y-4">
       <h1 className="text-2xl font-bold text-center">Intagram</h1>
-      <LoginForm handleSubmit={handleSubmit} isLoading={isLoading} />
+      <LoginForm
+        initialValues={initialValues}
+        handleSubmit={handleSubmit}
+        isLoading={isLoading}
+      />
     </div>
   )
 }

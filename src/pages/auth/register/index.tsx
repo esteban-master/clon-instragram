@@ -8,12 +8,14 @@ import { useRegister } from '../../../gql/user'
 
 const Register = () => {
   const { mutate, isLoading } = useRegister()
-  let history = useHistory()
+  const history = useHistory()
+
   function handleSubmit(values: ValuesFormRegister) {
     mutate(values, {
       onSuccess: ({ createUser }, variables, ctx) => {
         toast.success(`Registrado exitosamente ${createUser.name}`)
-        history.push('/home')
+        console.log('createUser: ', createUser)
+        history.push('/auth', createUser)
       },
       onError: (err: any, variables, ctx) => {
         toast.error(err.response.errors[0].message)
