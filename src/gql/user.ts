@@ -50,12 +50,12 @@ const useUsers = () => {
   })
 }
 
-const useUser = (userId: string) => {
+const useUserById = (userId: string) => {
   return useQuery(['user', userId], async () => {
     const { user } = await graphqlClient.request(
       gql`
-        query getUser($userId: String!) {
-          user(userId: $userId) {
+        query getUserById($userId: String!) {
+          userById(userId: $userId) {
             _id
             name
             username
@@ -67,6 +67,30 @@ const useUser = (userId: string) => {
       }
     )
     return user
+  })
+}
+const useUserByUsername = (username: string) => {
+  return useQuery(['user', username], async () => {
+    const { userByUsername } = await graphqlClient.request(
+      gql`
+        query getUserByUsername($username: String!) {
+          userByUsername(username: $username) {
+            _id
+            name
+            username
+            email
+            siteWeb
+            desc
+            avatar
+          }
+        }
+      `,
+      {
+        username
+      }
+    )
+
+    return userByUsername
   })
 }
 
@@ -121,4 +145,4 @@ const useRegister = () => {
   })
 }
 
-export { useUsers, useUser, useLogin, useRegister }
+export { useUsers, useUserById, useUserByUsername, useLogin, useRegister }
