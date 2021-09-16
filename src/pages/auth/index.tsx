@@ -1,7 +1,6 @@
 import React, { ReactNode, useEffect, useState } from 'react'
 import Login from './login'
 import Register from './register'
-import { Link as LinkUI } from '@vechaiui/react'
 import { useLocation } from 'react-router'
 
 const AuthPage = () => {
@@ -21,13 +20,12 @@ const AuthPage = () => {
               <Login initialValues={{ email: state?.email || '' }} />
               <p className="border border-gray-300 p-4 bg-white my-2">
                 ¿No tienes una cuenta?
-                <LinkUI
-                  as="span"
+                <span
                   className="mx-1 font-bold text-blue-500"
                   onClick={() => setShowLogin(false)}
                 >
                   Regístrate
-                </LinkUI>
+                </span>
               </p>
             </div>
           ) : (
@@ -35,13 +33,12 @@ const AuthPage = () => {
               <Register />
               <p className="border border-gray-300 p-4 bg-white my-2">
                 ¿Tienes una cuenta?
-                <LinkUI
-                  as="span"
+                <span
                   className="mx-1 font-bold text-blue-500"
                   onClick={() => setShowLogin(true)}
                 >
                   Inicia sesión
-                </LinkUI>
+                </span>
               </p>
             </div>
           )}

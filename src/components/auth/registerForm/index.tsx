@@ -1,13 +1,6 @@
 import React, { useState } from 'react'
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik'
 import * as Yup from 'yup'
-import {
-  Input,
-  FormControl,
-  FormLabel,
-  FormHelperText,
-  Button
-} from '@vechaiui/react'
 
 export interface ValuesFormRegister {
   email: string
@@ -64,7 +57,7 @@ const RegisterForm = ({ handleSubmit, isLoading }: FormProps) => {
     >
       {(formik) => (
         <form onSubmit={formik.handleSubmit} className="space-y-3">
-          <FormControl
+          {/* <FormControl
             id="name"
             invalid={!!formik.errors.name && formik.touched.name}
           >
@@ -143,7 +136,7 @@ const RegisterForm = ({ handleSubmit, isLoading }: FormProps) => {
             disabled={formik.isSubmitting || !formik.isValid}
           >
             Registrar
-          </Button>
+          </Button> */}
         </form>
       )}
     </Formik>

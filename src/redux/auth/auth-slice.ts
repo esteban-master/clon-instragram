@@ -12,6 +12,8 @@ export interface User {
   email: string
   avatar: null
   createdAt: string
+  followers: number
+  following: number
   desc: null
   siteWeb: null
 }

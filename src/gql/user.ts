@@ -2,6 +2,7 @@ import { useMutation, useQuery } from 'react-query'
 import { graphqlClient, gql } from '../api/graphql'
 import { ValuesFormRegister } from '../components/auth/registerForm'
 import { Login } from '../redux/auth/auth-slice'
+import { UserAllData } from './fragments'
 
 export interface ErrorGraphql {
   errors: Error[]
@@ -35,19 +36,27 @@ export interface Map {
   'content-type': string
 }
 
-const useUsers = () => {
-  return useQuery('users', async () => {
-    const data = await graphqlClient.request(gql`
-      query {
-        users {
-          _id
-          name
-          username
+const useSearchUsers = (search: string) => {
+  return useQuery(
+    ['search', search],
+    async () => {
+      const data = await graphqlClient.request(
+        gql`
+          query SearchUsers($search: String!) {
+            searchUsers(search: $search) {
+              username
+              avatar
+            }
+          }
+        `,
+        {
+          search
         }
-      }
-    `)
-    return data.users
-  })
+      )
+      return data.searchUsers
+    },
+    { enabled: !!search }
+  )
 }
 
 const useUserById = (userId: string) => {
@@ -56,11 +65,10 @@ const useUserById = (userId: string) => {
       gql`
         query getUserById($userId: String!) {
           userById(userId: $userId) {
-            _id
-            name
-            username
+            ...UserAllData
           }
         }
+        ${UserAllData}
       `,
       {
         userId
@@ -75,15 +83,10 @@ const useUserByUsername = (username: string) => {
       gql`
         query getUserByUsername($username: String!) {
           userByUsername(username: $username) {
-            _id
-            name
-            username
-            email
-            siteWeb
-            desc
-            avatar
+            ...UserAllData
           }
         }
+        ${UserAllData}
       `,
       {
         username
@@ -109,12 +112,6 @@ const useLogin = () => {
             user {
               _id
               username
-              name
-              email
-              avatar
-              createdAt
-              desc
-              siteWeb
             }
           }
         }
@@ -145,4 +142,4 @@ const useRegister = () => {
   })
 }
 
-export { useUsers, useUserById, useUserByUsername, useLogin, useRegister }
+export { useSearchUsers, useUserById, useUserByUsername, useLogin, useRegister }
