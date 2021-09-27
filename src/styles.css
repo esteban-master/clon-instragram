@@ -5,3 +5,10 @@
 html {
   @apply bg-gray-50;
 }
+
+.foto:hover .content_foto {
+  opacity: 1;
+}
+.foto:hover .overlay {
+  opacity: 0.3;
+}

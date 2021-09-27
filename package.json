@@ -12,6 +12,7 @@
     "lint": "eslint src --max-warnings=0"
   },
   "dependencies": {
+    "@headlessui/react": "^1.4.1",
     "@reduxjs/toolkit": "^1.6.1",
     "formik": "^2.2.9",
     "graphql": "^15.5.2",
@@ -19,6 +20,8 @@
     "jwt-decode": "^3.1.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-dropzone": "^11.4.0",
+    "react-infinite-scroll-component": "^6.1.0",
     "react-query": "^3.21.1",
     "react-redux": "^7.2.5",
     "react-router-dom": "^5.2.1",

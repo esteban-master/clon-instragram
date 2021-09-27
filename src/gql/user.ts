@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from 'react-query'
 import { graphqlClient, gql } from '../api/graphql'
 import { ValuesFormRegister } from '../components/auth/registerForm'
-import { Login } from '../redux/auth/auth-slice'
+import { Login, User } from '../redux/auth/auth-slice'
 import { UserAllData } from './fragments'
 
 export interface ErrorGraphql {
@@ -77,24 +77,31 @@ const useUserById = (userId: string) => {
     return user
   })
 }
-const useUserByUsername = (username: string) => {
-  return useQuery(['user', username], async () => {
-    const { userByUsername } = await graphqlClient.request(
-      gql`
-        query getUserByUsername($username: String!) {
-          userByUsername(username: $username) {
-            ...UserAllData
+const useUserByUsername = (username: string, userReq: string | undefined) => {
+  return useQuery<{ user: User; isFollow: boolean }>(
+    ['user', username],
+    async () => {
+      const { userByUsername } = await graphqlClient.request(
+        gql`
+          query getUserByUsername($username: String!, $userReq: String) {
+            userByUsername(username: $username, userReq: $userReq) {
+              user {
+                ...UserAllData
+              }
+              isFollow
+            }
           }
+          ${UserAllData}
+        `,
+        {
+          username,
+          userReq
         }
-        ${UserAllData}
-      `,
-      {
-        username
-      }
-    )
+      )
 
-    return userByUsername
-  })
+      return userByUsername
+    }
+  )
 }
 
 const useLogin = () => {
@@ -112,6 +119,7 @@ const useLogin = () => {
             user {
               _id
               username
+              name
             }
           }
         }

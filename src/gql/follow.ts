@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from 'react-query'
+import { useInfiniteQuery, useMutation, useQuery } from 'react-query'
 import { graphqlClient, gql } from '../api/graphql'
 import { User } from '../redux/auth/auth-slice'
 import { UserAllData } from './fragments'
@@ -92,26 +92,95 @@ const useUnFollow = () => {
   })
 }
 
-const useIsFollow = (id: string) => {
-  return useQuery(
-    ['isFollow', id],
-    async () => {
-      const { isfollow } = await graphqlClient.request(
+const useFollowing = (
+  userId: string,
+  idUserReq: string | undefined,
+  enabled: boolean
+) => {
+  return useInfiniteQuery(
+    ['following', userId],
+    async ({ pageParam }: any) => {
+      const { following } = await graphqlClient.request(
         gql`
-          query isFollow($_id: String!) {
-            isfollow(_id: $_id)
+          query Following(
+            $idUser: String!
+            $idUserReq: String!
+            $cursor: String
+          ) {
+            following(idUser: $idUser, idUserReq: $idUserReq, cursor: $cursor) {
+              data {
+                _id
+                follow {
+                  _id
+                  name
+                  avatar
+                  username
+                }
+                isFollow
+                createdAt
+              }
+              nextCursor
+            }
           }
         `,
         {
-          _id: id
+          idUser: userId,
+          idUserReq,
+          cursor: pageParam
         }
       )
-      return isfollow
+      return following
     },
     {
-      enabled: !!id
+      enabled,
+      getNextPageParam: (last, pages) => last.nextCursor
+    }
+  )
+}
+const useFollowers = (
+  userId: string,
+  idUserReq: string | undefined,
+  enabled: boolean
+) => {
+  return useInfiniteQuery(
+    ['followers', userId],
+    async ({ pageParam }: any) => {
+      const { followers } = await graphqlClient.request(
+        gql`
+          query Followers(
+            $idUser: String!
+            $idUserReq: String!
+            $cursor: String
+          ) {
+            followers(idUser: $idUser, idUserReq: $idUserReq, cursor: $cursor) {
+              data {
+                _id
+                userId {
+                  _id
+                  name
+                  avatar
+                  username
+                }
+                isFollow
+                createdAt
+              }
+              nextCursor
+            }
+          }
+        `,
+        {
+          idUser: userId,
+          idUserReq,
+          cursor: pageParam
+        }
+      )
+      return followers
+    },
+    {
+      enabled,
+      getNextPageParam: (last, pages) => last.nextCursor
     }
   )
 }
 
-export { useFollow, useIsFollow, useUnFollow }
+export { useFollow, useUnFollow, useFollowing, useFollowers }
