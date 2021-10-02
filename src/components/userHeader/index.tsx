@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { User } from '../../redux/auth/auth-slice'
+import { numeroAbreviado } from '../../utils/numero-abreviado'
 import FollowersModal from '../followersModal'
 import FollowingModal from '../followingModal'
 import FollowUnFollow from '../followUnFollow'
@@ -47,7 +48,10 @@ const UserHeader = ({
               className="cursor-pointer hover:underline"
               onClick={() => setOpenFollowers(true)}
             >
-              <span className="font-semibold">{user.followers}</span> followers
+              <span className="font-semibold">
+                {numeroAbreviado(user.followers)}
+              </span>{' '}
+              followers
               <FollowersModal
                 isOpen={openFollowers}
                 userId={user._id}
@@ -58,7 +62,10 @@ const UserHeader = ({
               className="cursor-pointer hover:underline"
               onClick={() => setOpenFollowing(true)}
             >
-              <span className="font-semibold">{user.following}</span> following
+              <span className="font-semibold">
+                {numeroAbreviado(user.following)}
+              </span>{' '}
+              following
               <FollowingModal
                 isOpen={openFollowing}
                 userId={user._id}

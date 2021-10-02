@@ -21,7 +21,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
-      <ToastContainer />
+      <ToastContainer position="bottom-left" />
       <Router />
     </QueryClientProvider>
   )
