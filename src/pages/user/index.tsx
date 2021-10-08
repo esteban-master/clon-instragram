@@ -6,6 +6,7 @@ import { UserNotFound } from '../usernotfound'
 import UserHeader from '../../components/userHeader'
 import ListPosts from '../../components/listPosts'
 import { usePostsUsername } from '../../gql/post'
+import { Link } from 'react-router-dom'
 
 const User = () => {
   const auth = useAuth()
@@ -25,7 +26,6 @@ const User = () => {
             data={user.data}
             idUserLogged={auth.login.user?._id}
           />
-
           {posts.data && <ListPosts posts={posts.data} />}
         </>
       )}

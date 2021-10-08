@@ -15,8 +15,7 @@ const Search = () => {
   const searchRef = useRef(null)
   const [search, setSearch] = useState('')
   const { data, isLoading, error, status } = useSearchUsers(search)
-  // console.log(data, isLoading, error, status)
-  // console.log('ses', search)
+
   useEffect(() => {
     const input$ = fromEvent<KeyboardEvent<HTMLInputElement>>(
       searchRef.current!,
@@ -48,7 +47,7 @@ const Search = () => {
         id="buscar"
         placeholder="Buscar"
         ref={searchRef}
-        className={`focus:outline-none outline-none w-96 py-0 px-2 border-2 border-gray-300 rounded-sm ${
+        className={`focus:outline-none outline-none w-32 md:w-96 py-0 px-2 border-2 border-gray-300 rounded-sm ${
           search && 'border-b-0'
         }`}
       />

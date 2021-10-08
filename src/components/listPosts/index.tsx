@@ -1,14 +1,18 @@
 import React from 'react'
 import { Post } from '../../models'
+import { numeroAbreviado } from '../../utils/numero-abreviado'
 
 const ListPosts = ({ posts }: { posts: Post[] }) => {
   return (
-    <div className="grid grid-cols-3 gap-4 mx-auto max-w-4xl border-gray-200 border-t py-7">
+    <div className="grid grid-cols-3 gap-2 sm:gap-4 mx-auto max-w-4xl border-0 border-gray-200 sm:border-t sm:py-7">
       {posts.map((p) => (
-        <div key={p._id} className="relative h-64 w-64 foto cursor-pointer">
+        <div
+          key={p._id}
+          className="relative h-32 w-full sm:h-44 md:h-56  foto cursor-pointer"
+        >
           <img
             src={p.photo}
-            alt="foto"
+            alt=" "
             className="absolute inset-0 h-full w-full object-cover"
           />
           <div className="overlay absolute opacity-0 inset-0  bg-black "></div>
@@ -26,7 +30,7 @@ const ListPosts = ({ posts }: { posts: Post[] }) => {
                   clipRule="evenodd"
                 />
               </svg>{' '}
-              <span> 7m</span>
+              <span> {numeroAbreviado(p.likes.length)}</span>
             </div>
             <div className="flex space-x-1">
               <svg

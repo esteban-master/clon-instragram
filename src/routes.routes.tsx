@@ -6,6 +6,7 @@ import Menu from './components/menu'
 import { useAuth } from './redux/store'
 import AuthPage from './pages/auth'
 import PrivateRoute from './components/auth/privateRoute'
+import FollowingModal from './components/followingModal'
 
 export default function Router() {
   const auth = useAuth()
