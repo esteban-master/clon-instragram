@@ -1,22 +1,5 @@
 import { createSlice, createAction } from '@reduxjs/toolkit'
-
-export interface Login {
-  token: string | undefined
-  user: User | undefined
-}
-
-export interface User {
-  _id: string
-  username: string
-  name: string
-  email: string
-  avatar: null
-  createdAt: string
-  followers: number
-  following: number
-  desc: null
-  siteWeb: null
-}
+import { Login } from '../../models'
 
 export interface StateAuth {
   login: Login

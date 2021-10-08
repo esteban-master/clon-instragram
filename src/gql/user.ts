@@ -1,40 +1,8 @@
 import { useMutation, useQuery } from 'react-query'
 import { graphqlClient, gql } from '../api/graphql'
 import { ValuesFormRegister } from '../components/auth/registerForm'
-import { Login, User } from '../redux/auth/auth-slice'
+import { ErrorGraphql, Login, User } from '../models'
 import { UserAllData } from './fragments'
-
-export interface ErrorGraphql {
-  errors: Error[]
-  data: null
-  status: number
-  headers: Headers
-}
-
-export interface Error {
-  message: string
-  extensions: Extensions
-}
-
-export interface Extensions {
-  code: string
-  response: Response
-}
-
-export interface Response {
-  statusCode: number
-  message: string
-  error: string
-}
-
-export interface Headers {
-  map: Map
-}
-
-export interface Map {
-  'content-length': string
-  'content-type': string
-}
 
 const useSearchUsers = (search: string) => {
   return useQuery(

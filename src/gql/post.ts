@@ -1,46 +1,6 @@
-import { useMutation, useQuery } from 'react-query'
+import { useInfiniteQuery, useMutation, useQuery } from 'react-query'
 import { graphqlClient, gql } from '../api/graphql'
-import { User } from '../redux/auth/auth-slice'
-
-export interface ErrorGraphql {
-  errors: Error[]
-  data: null
-  status: number
-  headers: Headers
-}
-
-export interface Error {
-  message: string
-  extensions: Extensions
-}
-
-export interface Extensions {
-  code: string
-  response: Response
-}
-
-export interface Response {
-  statusCode: number
-  message: string
-  error: string
-}
-
-export interface Headers {
-  map: Map
-}
-
-export interface Map {
-  'content-length': string
-  'content-type': string
-}
-
-export interface Post {
-  postedBy: User
-  text?: string
-  _id: string
-  createdAt: string
-  photo: string
-}
+import { ErrorGraphql, Post } from '../models'
 
 const useCreatePost = () => {
   return useMutation<
@@ -98,4 +58,50 @@ const usePostsUsername = (username: string) => {
   })
 }
 
-export { useCreatePost, usePostsUsername }
+const useFeed = () => {
+  return useInfiniteQuery<
+    {
+      data: Post[]
+      nextCursor?: string
+    },
+    { response: ErrorGraphql }
+  >(
+    ['feed'],
+    async ({ pageParam }: any) => {
+      console.log('PAGEPARAMS: ', pageParam)
+      const { feed } = await graphqlClient.request(
+        gql`
+          query Feed($feedInput: FeedInput!) {
+            feed(feedInput: $feedInput) {
+              data {
+                _id
+                postedBy {
+                  _id
+                  username
+                  avatar
+                }
+                text
+                photo
+                likes {
+                  username
+                }
+                createdAt
+              }
+
+              nextCursor
+            }
+          }
+        `,
+        {
+          feedInput: pageParam ? { cursor: pageParam } : {}
+        }
+      )
+      return feed
+    },
+    {
+      getNextPageParam: (last, pages) => last.nextCursor
+    }
+  )
+}
+
+export { useCreatePost, usePostsUsername, useFeed }

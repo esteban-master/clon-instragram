@@ -35,7 +35,7 @@ const Menu = ({ auth }: { auth: StateAuth }) => {
   }
 
   return (
-    <>
+    <header className="fixed inset-x-0 top-0 bg-white">
       <div className="border-2 border-b border-gray-200 shadow-sm py-2">
         <div className="max-w-4xl mx-auto grid grid-cols-12">
           <div className="col-span-3">
@@ -109,13 +109,12 @@ const Menu = ({ auth }: { auth: StateAuth }) => {
           </div>
         </div>
       </div>
-
       <CreatePostModal
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         userId={auth.login.user?._id}
       />
-    </>
+    </header>
   )
 }
 

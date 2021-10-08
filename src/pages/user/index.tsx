@@ -20,7 +20,11 @@ const User = () => {
     <>
       {user.data && (
         <>
-          <UserHeader data={user.data} idUserLogged={auth.login.user?._id} />
+          <UserHeader
+            postCount={posts.data?.length!!}
+            data={user.data}
+            idUserLogged={auth.login.user?._id}
+          />
 
           {posts.data && <ListPosts posts={posts.data} />}
         </>

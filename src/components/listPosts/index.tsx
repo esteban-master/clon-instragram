@@ -1,5 +1,5 @@
 import React from 'react'
-import { Post } from '../../gql/post'
+import { Post } from '../../models'
 
 const ListPosts = ({ posts }: { posts: Post[] }) => {
   return (

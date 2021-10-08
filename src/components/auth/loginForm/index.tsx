@@ -31,15 +31,8 @@ const LoginForm = ({ initialValues, handleSubmit, isLoading }: FormProps) => {
           .min(5, 'Debe tener al menos 5 caracteres')
           .required('El password es requerido')
       })}
-      onSubmit={async (
-        values: ValuesForm,
-        { resetForm }: FormikHelpers<ValuesForm>
-      ) => {
+      onSubmit={async (values: ValuesForm) => {
         handleSubmit(values)
-        // if (ok) {
-        //   resetForm()
-        // }
-        // console.log(values)
       }}
     >
       {(formik) => (
@@ -48,7 +41,8 @@ const LoginForm = ({ initialValues, handleSubmit, isLoading }: FormProps) => {
             <input
               type="text"
               {...formik.getFieldProps('email')}
-              className="focus:outline-none"
+              className="focus:outline-none w-full py-0 px-2 border-2 border-gray-300 rounded-sm"
+              placeholder="Email"
             />
             {formik.touched.email && formik.errors.email ? (
               <span className="text-red-600 text-xs">
@@ -57,7 +51,12 @@ const LoginForm = ({ initialValues, handleSubmit, isLoading }: FormProps) => {
             ) : null}
           </div>
           <div>
-            <input type="password" {...formik.getFieldProps('password')} />
+            <input
+              type="password"
+              placeholder="Password"
+              {...formik.getFieldProps('password')}
+              className="focus:outline-none w-full py-0 px-2 border-2 border-gray-300 rounded-sm"
+            />
             {formik.touched.password && formik.errors.password ? (
               <span className="text-red-600 text-xs">
                 {formik.errors.password}
@@ -66,7 +65,7 @@ const LoginForm = ({ initialValues, handleSubmit, isLoading }: FormProps) => {
           </div>
 
           <button
-            className="w-full"
+            className="w-full bg-blue-500 text-white p-1 font-semibold"
             type="submit"
             disabled={formik.isSubmitting || !formik.isValid}
           >

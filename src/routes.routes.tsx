@@ -10,9 +10,9 @@ import PrivateRoute from './components/auth/privateRoute'
 export default function Router() {
   const auth = useAuth()
   return (
-    <div className="">
-      <BrowserRouter>
-        <Menu auth={auth} />
+    <BrowserRouter>
+      <Menu auth={auth} />
+      <div className="mt-14 py-3">
         <Switch>
           <PrivateRoute path="/" exact logged={auth.logged}>
             <Home />
@@ -24,7 +24,7 @@ export default function Router() {
             <User />
           </Route>
         </Switch>
-      </BrowserRouter>
-    </div>
+      </div>
+    </BrowserRouter>
   )
 }

@@ -15,7 +15,6 @@ const Login = ({ initialValues }: { initialValues: { email: string } }) => {
     mutate(values, {
       onSuccess: ({ login }, variables, ctx) => {
         toast.success(`Bienvenido ${login.user?.name}`)
-        // console.log('login: ', login)
         dispatch(loginAction(login))
         history.replace('/')
       },
