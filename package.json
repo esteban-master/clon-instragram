@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.4.1",
+    "@heroicons/react": "^1.0.4",
     "@reduxjs/toolkit": "^1.6.1",
     "formik": "^2.2.9",
     "graphql": "^15.5.2",

@@ -2,6 +2,7 @@ import React from 'react'
 import { useFeed } from '../../gql/post'
 import PostItem from './Post'
 import InfiniteScroll from 'react-infinite-scroll-component'
+
 const ListPostFeed = () => {
   const feed = useFeed()
 

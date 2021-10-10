@@ -1,14 +1,85 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Post } from '../../models'
 import { formatNumero } from '../../utils/formatNumero'
 import TimeAgoReact from 'timeago-react'
 import * as timeago from 'timeago.js'
 import es from 'timeago.js/lib/lang/es'
+import { useDisLikePost, useLikePost } from '../../gql/post'
+import {
+  HeartIcon as HeartIconOutline,
+  ChatAlt2Icon
+} from '@heroicons/react/outline'
+import { HeartIcon as HeartIconSolid } from '@heroicons/react/solid'
+import { useAuth } from '../../redux/store'
+import { useQueryClient } from 'react-query'
 timeago.register('es', es)
 
 const PostItem = ({ post }: { post: Post }) => {
+  const queryClient = useQueryClient()
   const { postedBy, text, photo, likes, createdAt } = post
+  const { login } = useAuth()
+
+  const like = useLikePost()
+  const disLike = useDisLikePost()
+
+  function isLike(likes: any[]) {
+    return likes.some((u) => u._id === login.user?._id)
+  }
+
+  function likePost() {
+    like.mutate(post._id, {
+      onSuccess: (data, variables, ctx) => {
+        const feed: any = queryClient.getQueryData('feed')
+        const newPagesArray = feed?.pages.map((page: any) => {
+          const dataPosts = page.data.map((postPage: any) => {
+            if (postPage._id === post._id) {
+              return { ...postPage, likes: data.likes }
+            }
+            return postPage
+          })
+          return {
+            data: dataPosts,
+            nextCursor: page.data.nextCursor
+          }
+        })
+        queryClient.setQueryData('feed', (dataQuery: any) => ({
+          pages: newPagesArray,
+          pageParams: dataQuery.pageParams
+        }))
+      },
+      onError: (err, variables, ctx) => {
+        console.log('ERRORES: ', err, variables)
+      }
+    })
+  }
+  function dislikePost() {
+    disLike.mutate(post._id, {
+      onSuccess: (data, ctx) => {
+        const feed: any = queryClient.getQueryData('feed')
+        const newPagesArray = feed?.pages.map((page: any) => {
+          const dataFollows = page.data.map((postPage: any) => {
+            if (postPage._id === post._id) {
+              return { ...postPage, likes: data.likes }
+            }
+            return postPage
+          })
+          return {
+            data: dataFollows,
+            nextCursor: page.data.nextCursor
+          }
+        })
+        queryClient.setQueryData('feed', (dataQuery: any) => ({
+          pages: newPagesArray,
+          pageParams: dataQuery.pageParams
+        }))
+      },
+      onError: (err, variables, ctx) => {
+        console.log('ERRORES: ', err, variables)
+      }
+    })
+  }
+
   return (
     <div className="border border-gray-300 max-w-lg rounded-sm">
       <div className="flex justify-between items-center py-2 px-3">
@@ -37,53 +108,22 @@ const PostItem = ({ post }: { post: Post }) => {
       </div>
 
       <div className="py-2 px-3 space-y-2">
-        <div className="flex justify-between ">
-          <div className="flex space-x-3">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-7 w-7 cursor-pointer"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-              />
-            </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-7 w-7 cursor-pointer"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"
-              />
-            </svg>
-          </div>
-
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-7 w-7 cursor-pointer"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+        <div className="flex space-x-3">
+          {isLike(likes) ? (
+            <HeartIconSolid
+              className="h-7 w-7 cursor-pointer text-red-600"
+              onClick={dislikePost}
             />
-          </svg>
+          ) : (
+            <HeartIconOutline
+              className="h-7 w-7 cursor-pointer"
+              onClick={likePost}
+            />
+          )}
+
+          <ChatAlt2Icon className="h-7 w-7 cursor-pointer" />
         </div>
+
         <div className="space-y-2">
           <span className="font-semibold text-sm ">
             {formatNumero(likes.length)} Me Gusta

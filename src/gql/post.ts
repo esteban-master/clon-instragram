@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation, useQuery } from 'react-query'
 import { graphqlClient, gql } from '../api/graphql'
-import { ErrorGraphql, Post } from '../models'
+import { ErrorGraphql, Post, User } from '../models'
 
 const useCreatePost = () => {
   return useMutation<
@@ -68,7 +68,6 @@ const useFeed = () => {
   >(
     ['feed'],
     async ({ pageParam }: any) => {
-      console.log('PAGEPARAMS: ', pageParam)
       const { feed } = await graphqlClient.request(
         gql`
           query Feed($feedInput: FeedInput!) {
@@ -83,7 +82,9 @@ const useFeed = () => {
                 text
                 photo
                 likes {
+                  _id
                   username
+                  avatar
                 }
                 createdAt
               }
@@ -104,4 +105,55 @@ const useFeed = () => {
   )
 }
 
-export { useCreatePost, usePostsUsername, useFeed }
+const useLikePost = () => {
+  return useMutation<
+    { likes: Pick<User, '_id' | 'username' | 'avatar'>[] },
+    { response: ErrorGraphql },
+    string
+  >(async (idPost) => {
+    const { likePost } = await graphqlClient.request(
+      gql`
+        mutation LikePost($idPost: String!) {
+          likePost(idPost: $idPost) {
+            likes {
+              _id
+              username
+              avatar
+            }
+          }
+        }
+      `,
+      {
+        idPost
+      }
+    )
+    return likePost
+  })
+}
+const useDisLikePost = () => {
+  return useMutation<
+    { likes: Pick<User, '_id' | 'username' | 'avatar'>[] },
+    { response: ErrorGraphql },
+    string
+  >(async (idPost) => {
+    const { dislikePost } = await graphqlClient.request(
+      gql`
+        mutation DislikePost($idPost: String!) {
+          dislikePost(idPost: $idPost) {
+            likes {
+              _id
+              username
+              avatar
+            }
+          }
+        }
+      `,
+      {
+        idPost
+      }
+    )
+    return dislikePost
+  })
+}
+
+export { useCreatePost, usePostsUsername, useFeed, useLikePost, useDisLikePost }

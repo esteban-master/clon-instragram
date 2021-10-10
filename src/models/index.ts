@@ -22,7 +22,7 @@ export interface Post {
   _id: string
   createdAt: string
   photo: string
-  likes: string[]
+  likes: Pick<User, '_id' | 'avatar' | 'username'>[]
 }
 
 // Graphql request
