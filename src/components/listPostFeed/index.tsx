@@ -1,14 +1,10 @@
 import React from 'react'
 import { useFeed } from '../../gql/post'
-import PostItem from './Post'
+import PostItem from './PostItem'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 const ListPostFeed = () => {
   const feed = useFeed()
-
-  if (feed.isLoading) {
-    return <div>Cargando posts...</div>
-  }
 
   const dataLength = feed.data?.pages.reduce((counter, page) => {
     return counter + page.data.length
@@ -16,6 +12,7 @@ const ListPostFeed = () => {
 
   return (
     <div className="flex justify-center ">
+      {feed.isLoading && <p>Cargando posts...</p>}
       {feed.status === 'success' && (
         <InfiniteScroll
           dataLength={dataLength!}

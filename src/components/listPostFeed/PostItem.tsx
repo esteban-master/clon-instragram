@@ -13,13 +13,14 @@ import {
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/solid'
 import { useAuth } from '../../redux/store'
 import { useQueryClient } from 'react-query'
+import CommentPost from './CommentPost'
+
 timeago.register('es', es)
 
 const PostItem = ({ post }: { post: Post }) => {
   const queryClient = useQueryClient()
-  const { postedBy, text, photo, likes, createdAt } = post
+  const { postedBy, text, photo, likes, createdAt, comments } = post
   const { login } = useAuth()
-
   const like = useLikePost()
   const disLike = useDisLikePost()
 
@@ -81,7 +82,7 @@ const PostItem = ({ post }: { post: Post }) => {
   }
 
   return (
-    <div className="border border-gray-300 max-w-lg rounded-sm">
+    <div className="border border-gray-300 max-w-lg rounded-sm bg-white">
       <div className="flex justify-between items-center py-2 px-3">
         <div className="flex space-x-3 items-center">
           <img
@@ -107,7 +108,7 @@ const PostItem = ({ post }: { post: Post }) => {
         <img className="object-cover w-full" src={photo} alt="" />
       </div>
 
-      <div className="py-2 px-3 space-y-2">
+      <div className="py-2 px-3 space-y-2 ">
         <div className="flex space-x-3">
           {isLike(likes) ? (
             <HeartIconSolid
@@ -137,6 +138,11 @@ const PostItem = ({ post }: { post: Post }) => {
           <div className="text-xs text-gray-400">
             <TimeAgoReact datetime={createdAt} locale="es" />
           </div>
+          <CommentPost
+            comments={comments}
+            idPost={post._id}
+            userAuth={login.user!}
+          />
         </div>
       </div>
     </div>

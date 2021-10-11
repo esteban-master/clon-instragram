@@ -23,6 +23,14 @@ export interface Post {
   createdAt: string
   photo: string
   likes: Pick<User, '_id' | 'avatar' | 'username'>[]
+  comments: Comment[]
+}
+
+export interface Comment {
+  _id: string
+  postedBy: Pick<User, '_id' | 'avatar' | 'username'>
+  text: string
+  createdAt: string
 }
 
 // Graphql request

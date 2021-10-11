@@ -45,6 +45,16 @@ const usePostsUsername = (username: string) => {
               _id
               username
             }
+            comments {
+              _id
+              postedBy {
+                username
+                _id
+                avatar
+              }
+              text
+              createdAt
+            }
             createdAt
           }
         }
@@ -84,11 +94,19 @@ const useFeed = () => {
                 likes {
                   _id
                   username
-                  avatar
                 }
                 createdAt
+                comments {
+                  postedBy {
+                    _id
+                    username
+                    avatar
+                  }
+                  _id
+                  text
+                  createdAt
+                }
               }
-
               nextCursor
             }
           }
@@ -130,6 +148,7 @@ const useLikePost = () => {
     return likePost
   })
 }
+
 const useDisLikePost = () => {
   return useMutation<
     { likes: Pick<User, '_id' | 'username' | 'avatar'>[] },
@@ -156,4 +175,72 @@ const useDisLikePost = () => {
   })
 }
 
-export { useCreatePost, usePostsUsername, useFeed, useLikePost, useDisLikePost }
+const useCommentPost = () => {
+  return useMutation<
+    Post,
+    { response: ErrorGraphql },
+    { text: string; idPost: string }
+  >(async (createCommentData) => {
+    const { commentPost } = await graphqlClient.request(
+      gql`
+        mutation CommentPost($createCommentData: CreateCommentInput!) {
+          commentPost(createCommentData: $createCommentData) {
+            _id
+            text
+            likes {
+              _id
+              username
+            }
+            comments {
+              text
+              createdAt
+              _id
+              postedBy {
+                username
+                avatar
+              }
+            }
+            photo
+            postedBy {
+              _id
+              username
+              avatar
+            }
+          }
+        }
+      `,
+      {
+        createCommentData
+      }
+    )
+    return commentPost
+  })
+}
+const useDeleteCommentPost = () => {
+  return useMutation<
+    boolean,
+    { response: ErrorGraphql },
+    { idPostedBy: string; idComment: string; idPost: string }
+  >(async (deleteCommentData) => {
+    const { deleteCommentPost } = await graphqlClient.request(
+      gql`
+        mutation DeleteComment($deleteCommentData: DeleteCommentInput!) {
+          deleteCommentPost(deleteCommentData: $deleteCommentData)
+        }
+      `,
+      {
+        deleteCommentData
+      }
+    )
+    return deleteCommentPost
+  })
+}
+export {
+  useCommentPost,
+  useDeleteCommentPost,
+  useCreatePost,
+  usePostsUsername,
+  useFeed,
+  useLikePost,
+  useDisLikePost
+}
