@@ -5,88 +5,24 @@ import { formatNumero } from '../../utils/formatNumero'
 import TimeAgoReact from 'timeago-react'
 import * as timeago from 'timeago.js'
 import es from 'timeago.js/lib/lang/es'
-import { useDisLikePost, useLikePost } from '../../gql/post'
-import {
-  HeartIcon as HeartIconOutline,
-  ChatAlt2Icon
-} from '@heroicons/react/outline'
-import { HeartIcon as HeartIconSolid } from '@heroicons/react/solid'
+
 import { useAuth } from '../../redux/store'
-import { useQueryClient } from 'react-query'
+
 import CommentPost from './CommentPost'
+import LikeAndCommentButtons from './LikeAndCommentButtons'
 
 timeago.register('es', es)
 
 const PostItem = ({ post }: { post: Post }) => {
-  const queryClient = useQueryClient()
   const { postedBy, text, photo, likes, createdAt, comments } = post
   const { login } = useAuth()
-  const like = useLikePost()
-  const disLike = useDisLikePost()
-
-  function isLike(likes: any[]) {
-    return likes.some((u) => u._id === login.user?._id)
-  }
-
-  function likePost() {
-    like.mutate(post._id, {
-      onSuccess: (data, variables, ctx) => {
-        const feed: any = queryClient.getQueryData('feed')
-        const newPagesArray = feed?.pages.map((page: any) => {
-          const dataPosts = page.data.map((postPage: any) => {
-            if (postPage._id === post._id) {
-              return { ...postPage, likes: data.likes }
-            }
-            return postPage
-          })
-          return {
-            data: dataPosts,
-            nextCursor: page.data.nextCursor
-          }
-        })
-        queryClient.setQueryData('feed', (dataQuery: any) => ({
-          pages: newPagesArray,
-          pageParams: dataQuery.pageParams
-        }))
-      },
-      onError: (err, variables, ctx) => {
-        console.log('ERRORES: ', err, variables)
-      }
-    })
-  }
-  function dislikePost() {
-    disLike.mutate(post._id, {
-      onSuccess: (data, ctx) => {
-        const feed: any = queryClient.getQueryData('feed')
-        const newPagesArray = feed?.pages.map((page: any) => {
-          const dataFollows = page.data.map((postPage: any) => {
-            if (postPage._id === post._id) {
-              return { ...postPage, likes: data.likes }
-            }
-            return postPage
-          })
-          return {
-            data: dataFollows,
-            nextCursor: page.data.nextCursor
-          }
-        })
-        queryClient.setQueryData('feed', (dataQuery: any) => ({
-          pages: newPagesArray,
-          pageParams: dataQuery.pageParams
-        }))
-      },
-      onError: (err, variables, ctx) => {
-        console.log('ERRORES: ', err, variables)
-      }
-    })
-  }
 
   return (
     <div className="border border-gray-300 max-w-lg rounded-sm bg-white">
       <div className="flex justify-between items-center py-2 px-3">
         <div className="flex space-x-3 items-center">
           <img
-            className="rounded-full h-9"
+            className="rounded-full h-8 w-8 object-cover"
             src={postedBy.avatar ? postedBy.avatar : '/avatar.png'}
             alt="Foto"
           />
@@ -109,21 +45,11 @@ const PostItem = ({ post }: { post: Post }) => {
       </div>
 
       <div className="py-2 px-3 space-y-2 ">
-        <div className="flex space-x-3">
-          {isLike(likes) ? (
-            <HeartIconSolid
-              className="h-7 w-7 cursor-pointer text-red-600"
-              onClick={dislikePost}
-            />
-          ) : (
-            <HeartIconOutline
-              className="h-7 w-7 cursor-pointer"
-              onClick={likePost}
-            />
-          )}
-
-          <ChatAlt2Icon className="h-7 w-7 cursor-pointer" />
-        </div>
+        <LikeAndCommentButtons
+          user={login.user!}
+          likes={likes}
+          postId={post._id}
+        />
 
         <div className="space-y-2">
           <span className="font-semibold text-sm ">

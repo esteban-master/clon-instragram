@@ -53,7 +53,7 @@ const FollowingModal = ({ isOpen, setIsOpen, userId }: any) => {
                       <div className="flex items-center space-x-2">
                         <div>
                           <img
-                            className="rounded-full h-7"
+                            className="rounded-full h-7 w-7 object-cover"
                             src={follow.avatar ? follow.avatar : '/avatar.png'}
                             alt=""
                           />

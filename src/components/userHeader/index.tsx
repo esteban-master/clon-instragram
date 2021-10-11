@@ -22,7 +22,7 @@ const UserHeader = ({
       <div className="col-span-3 sm:col-span-4 sm:row-span-2">
         <img
           className=" h-24 w-24 sm:h-40 sm:w-40 object-cover rounded-full mx-auto"
-          src="https://depor.com/resizer/HhgIgCtdyldP-ldquu1sr9w-VNQ=/580x330/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/DIOAQOSO55FNDOUEGEGAXDIRAI.jpg"
+          src={user.avatar ? user.avatar : '/avatar.png'}
           alt=""
         />
       </div>

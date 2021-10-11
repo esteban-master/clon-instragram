@@ -9,7 +9,6 @@ const FollowersModal = ({ isOpen, setIsOpen, userId }: any) => {
   let completeButtonRef = useRef(null)
   const auth = useAuth()
   const followers = useFollowers(userId, auth.login.user?._id, isOpen)
-  // console.log('Followers: ', followers, userId, auth.login.user?._id)
   return (
     <Dialog
       open={isOpen}
@@ -53,7 +52,7 @@ const FollowersModal = ({ isOpen, setIsOpen, userId }: any) => {
                       <div className="flex items-center space-x-2">
                         <div>
                           <img
-                            className="rounded-full h-7"
+                            className="rounded-full h-7 w-7 object-cover"
                             src={user.avatar ? user.avatar : '/avatar.png'}
                             alt=""
                           />

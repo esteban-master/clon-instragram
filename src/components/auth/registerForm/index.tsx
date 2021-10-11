@@ -7,6 +7,7 @@ export interface ValuesFormRegister {
   password: string
   username: string
   name: string
+  avatar: string
 }
 
 interface FormProps {
@@ -15,15 +16,14 @@ interface FormProps {
 }
 
 const RegisterForm = ({ handleSubmit, isLoading }: FormProps) => {
-  const [verPassword, setVerPassword] = useState(false)
-
   return (
     <Formik
       initialValues={{
-        email: 'marisolbeltranleal@gmail.com',
-        password: 'sdaasadasdasD3#',
-        name: 'user mock jajaja',
-        username: 'mock3212323233'
+        email: '',
+        password: '',
+        name: '',
+        username: '',
+        avatar: ''
       }}
       validationSchema={Yup.object({
         email: Yup.string().email().required('El email es requerido'),
@@ -49,94 +49,76 @@ const RegisterForm = ({ handleSubmit, isLoading }: FormProps) => {
         { resetForm }: FormikHelpers<ValuesFormRegister>
       ) => {
         handleSubmit(values)
-        // if (ok) {
-        //   resetForm()
-        // }
-        // console.log(values)
       }}
     >
       {(formik) => (
         <form onSubmit={formik.handleSubmit} className="space-y-3">
-          {/* <FormControl
-            id="name"
-            invalid={!!formik.errors.name && formik.touched.name}
-          >
-            <FormLabel>Name</FormLabel>
-            <Input
-              color="blue"
+          <div>
+            <input
               type="text"
-              placeholder="Fernando"
               {...formik.getFieldProps('name')}
+              className="focus:outline-none w-full py-0 px-2 border-2 border-gray-300 rounded-sm"
+              placeholder="Name"
             />
             {formik.touched.name && formik.errors.name ? (
-              <FormHelperText className="text-red-600 text-xs">
-                {formik.errors.name}
-              </FormHelperText>
+              <span className="text-red-600 text-xs">{formik.errors.name}</span>
             ) : null}
-          </FormControl>
-          <FormControl
-            id="username"
-            invalid={!!formik.errors.username && formik.touched.username}
-          >
-            <FormLabel>Username</FormLabel>
-            <Input
-              color="blue"
+          </div>
+          <div>
+            <input
               type="text"
-              placeholder="fernandito12"
               {...formik.getFieldProps('username')}
+              className="focus:outline-none w-full py-0 px-2 border-2 border-gray-300 rounded-sm"
+              placeholder="fernandito2"
             />
             {formik.touched.username && formik.errors.username ? (
-              <FormHelperText className="text-red-600 text-xs">
+              <span className="text-red-600 text-xs">
                 {formik.errors.username}
-              </FormHelperText>
+              </span>
             ) : null}
-          </FormControl>
-
-          <FormControl
-            id="email"
-            invalid={!!formik.errors.email && formik.touched.email}
-          >
-            <FormLabel>Email</FormLabel>
-            <Input
-              color="blue"
-              type="email"
-              placeholder="jon@gmail.com"
+          </div>
+          <div>
+            <input
+              type="text"
+              {...formik.getFieldProps('avatar')}
+              className="focus:outline-none w-full py-0 px-2 border-2 border-gray-300 rounded-sm"
+              placeholder="Avatar - opcional"
+            />
+          </div>
+          <div>
+            <input
+              type="text"
               {...formik.getFieldProps('email')}
+              className="focus:outline-none w-full py-0 px-2 border-2 border-gray-300 rounded-sm"
+              placeholder="Email"
             />
             {formik.touched.email && formik.errors.email ? (
-              <FormHelperText className="text-red-600 text-xs">
+              <span className="text-red-600 text-xs">
                 {formik.errors.email}
-              </FormHelperText>
+              </span>
             ) : null}
-          </FormControl>
-          <FormControl
-            id="password"
-            invalid={!!formik.errors.password && formik.touched.password}
-          >
-            <FormLabel>Password</FormLabel>
-            <Input
-              color="blue"
+          </div>
+
+          <div>
+            <input
               type="password"
-              placeholder="123456"
+              placeholder="Password"
               {...formik.getFieldProps('password')}
+              className="focus:outline-none w-full py-0 px-2 border-2 border-gray-300 rounded-sm"
             />
             {formik.touched.password && formik.errors.password ? (
-              <FormHelperText className="text-red-600 text-xs">
+              <span className="text-red-600 text-xs">
                 {formik.errors.password}
-              </FormHelperText>
+              </span>
             ) : null}
-          </FormControl>
-          <Button
-            className="w-full"
+          </div>
+          <button
+            className="w-full bg-blue-500 text-white p-1 font-semibold"
             type="submit"
-            variant="solid"
-            color="blue"
-            loading={isLoading}
-            loadingText="Registrando..."
             disabled={formik.isSubmitting || !formik.isValid}
           >
             Registrar
-          </Button> */}
+          </button>
         </form>
       )}
     </Formik>

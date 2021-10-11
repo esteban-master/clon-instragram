@@ -3,8 +3,10 @@ import { useDropzone } from 'react-dropzone'
 import { Dialog } from '@headlessui/react'
 import { useCreatePost } from '../../gql/post'
 import { toast } from 'react-toastify'
-const CreatePostModal = ({ isOpen, setIsOpen, userId }: any) => {
+import { useQueryClient } from 'react-query'
+const CreatePostModal = ({ isOpen, setIsOpen, userId, username }: any) => {
   const createPost = useCreatePost()
+  const queryClient = useQueryClient()
 
   const [filePreview, setFilePreview] = useState<any>({
     file: '',
@@ -14,7 +16,7 @@ const CreatePostModal = ({ isOpen, setIsOpen, userId }: any) => {
 
   const onDropAccepted = useCallback((acceptedFiles) => {
     // Do something with the files
-    console.log('QUE SALE: ', acceptedFiles)
+    // console.log('QUE SALE: ', acceptedFiles)
     setFilePreview({
       file: acceptedFiles[0],
       preview: URL.createObjectURL(acceptedFiles[0])
@@ -53,6 +55,15 @@ const CreatePostModal = ({ isOpen, setIsOpen, userId }: any) => {
           })
           setDescription('')
           setIsOpen(false)
+          const posts: any = queryClient.getQueryData(['posts', username])
+          if (posts) {
+            console.log(posts, 'DATA: ', data, posts.concat(data), [
+              'posts',
+              username
+            ])
+            const newsPost = [data, ...posts]
+            queryClient.setQueryData(['posts', username], newsPost)
+          }
           toast.success(`Post creado!`)
         },
         onError: (err, variables, ctx) => {

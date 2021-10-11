@@ -113,6 +113,7 @@ const Menu = ({ auth }: { auth: StateAuth }) => {
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         userId={auth.login.user?._id}
+        username={auth.login.user?.username}
       />
     </header>
   )

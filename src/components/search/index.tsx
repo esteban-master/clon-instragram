@@ -63,7 +63,7 @@ const Search = () => {
                   to={`/${username}`}
                 >
                   <img
-                    className="rounded-full h-5 w-5"
+                    className="rounded-full h-7 w-7 object-cover"
                     src={data.avatar ? data.avatar : '/avatar.png'}
                     alt=""
                   />

@@ -20,6 +20,12 @@ const useCreatePost = () => {
               _id
               username
             }
+            likes {
+              username
+            }
+            comments {
+              _id
+            }
             createdAt
           }
         }
@@ -54,6 +60,11 @@ const usePostsUsername = (username: string) => {
               }
               text
               createdAt
+            }
+            postedBy {
+              _id
+              username
+              avatar
             }
             createdAt
           }
@@ -196,6 +207,7 @@ const useCommentPost = () => {
               createdAt
               _id
               postedBy {
+                _id
                 username
                 avatar
               }
